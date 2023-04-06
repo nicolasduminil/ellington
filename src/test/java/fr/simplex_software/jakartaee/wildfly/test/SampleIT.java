@@ -1,16 +1,17 @@
 package fr.simplex_software.jakartaee.wildfly.test;
 
 import org.jboss.arquillian.container.test.api.*;
-import org.jboss.arquillian.junit.*;
+import org.jboss.arquillian.junit5.*;
 import org.jboss.shrinkwrap.api.*;
 import org.jboss.shrinkwrap.api.importer.*;
 import org.jboss.shrinkwrap.api.spec.*;
-import org.junit.*;
-import org.junit.runner.*;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.*;
 
 import java.io.*;
 
-@RunWith(Arquillian.class)
+
+@ExtendWith(ArquillianExtension.class)
 public class SampleIT
 {
   @Deployment
