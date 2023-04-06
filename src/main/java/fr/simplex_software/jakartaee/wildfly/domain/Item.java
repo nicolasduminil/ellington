@@ -1,18 +1,18 @@
 package fr.simplex_software.jakartaee.wildfly.domain;
 
-import javax.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.*;
 
 @XmlRootElement
-public class KeyValuePair
+public class Item
 {
   private String key;
   private String value;
 
-  public KeyValuePair()
+  public Item()
   {
   }
 
-  public KeyValuePair(String key, String value)
+  public Item(String key, String value)
   {
     this.key = key;
     this.value = value;
