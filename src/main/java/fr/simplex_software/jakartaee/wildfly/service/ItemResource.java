@@ -40,6 +40,8 @@ public class ItemResource
   }
 
   @POST
+  @Path("/add")
+  @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response createItem(@FormParam("key")String key, @FormParam("value")String value)
   {

@@ -105,8 +105,20 @@
     <dependency>
       <groupId>org.jboss.resteasy</groupId>
       <artifactId>resteasy-client</artifactId>
-      <version>6.2.3.Final</version>
+      <!--version>6.2.2.Final</version-->
     </dependency>
+    <!--dependency>
+      <groupId>org.glassfish.jersey.core</groupId>
+      <artifactId>jersey-client</artifactId>
+      <version>3.1.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.inject</groupId>
+      <artifactId>jersey-hk2</artifactId>
+      <version>3.1.0</version>
+      <scope>test</scope>
+    </dependency-->
   </dependencies>
   <build>
     <finalName>${project.artifactId}</finalName>

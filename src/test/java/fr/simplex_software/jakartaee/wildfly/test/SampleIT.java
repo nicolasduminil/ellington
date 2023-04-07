@@ -58,7 +58,8 @@ public class SampleIT
   @Order(10)
   public void test() throws MalformedURLException
   {
-    Response response = webTarget.path("add").request(MediaType.APPLICATION_FORM_URLENCODED).post(Entity.form(new Form().param("key", "myKey").param("value", "myValue")));
+    Response response = webTarget.path("add").request().accept(MediaType.TEXT_HTML).post(Entity.form(new Form()
+      .param("key", "myKey").param("value", "myValue")));
     assertThat(response).isNotNull();
     assertThat(response.getStatus()).isEqualTo(HttpStatus.SC_OK);
   }
