@@ -8,7 +8,7 @@ import jakarta.ws.rs.core.*;
 
 import java.util.*;
 
-@Path("kv")
+@Path("items")
 public class ItemResource
 {
   private static final String RESPONSE_OK="<p>Property has been added ! </p> <p><a href=\"http://localhost:8080/duke\">Back</a></p>";
@@ -16,7 +16,7 @@ public class ItemResource
   private ItemFacade itemFacade;
 
   @GET
-  @Path("/xml/{id}")
+  @Path("{id}")
   @Produces(MediaType.APPLICATION_XML)
   public Item getItemByPathParam(@PathParam("id")int id)
   {
@@ -24,7 +24,6 @@ public class ItemResource
   }
 
   @GET
-  @Path("/xml")
   @Produces(MediaType.APPLICATION_XML)
   public Item getItemByQueryId(@QueryParam("id")int id)
   {
@@ -40,7 +39,6 @@ public class ItemResource
   }
 
   @POST
-  @Path("/add")
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.TEXT_HTML)
   public Response createItem(@FormParam("key")String key, @FormParam("value")String value)
@@ -48,4 +46,30 @@ public class ItemResource
     int n = itemFacade.addToList(key,value);
     return Response.ok(RESPONSE_OK).build();
   }
+
+  @DELETE
+  @Path("{id}")
+  public Response removeItem(@PathParam("id")int id)
+  {
+    return Response.ok(itemFacade.removeFromList(id)).build();
+  }
+
+  @DELETE
+  public Response removeItems()
+  {
+    itemFacade.removeAll();
+    return Response.ok().build();
+  }
+
+
+
+
+
+
+
+
+
+
+
+
 }

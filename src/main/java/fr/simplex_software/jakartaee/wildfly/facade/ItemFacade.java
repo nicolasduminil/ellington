@@ -45,4 +45,21 @@ public class ItemFacade implements Serializable
     itemList.add(new Item(key, value));
     return itemList.size();
   }
+
+  public int removeFromList(Item item)
+  {
+    itemList.remove(item);
+    return itemList.size();
+  }
+
+  public int removeFromList(int idx)
+  {
+    itemList.remove(idx);
+    return itemList.size();
+  }
+
+  public void removeAll()
+  {
+    itemList.clear();
+  }
 }
