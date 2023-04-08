@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.*;
 @ExtendWith(ArquillianExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class SampleIT
+public class ItemIT
 {
   @ArquillianResource
   private URL url;
