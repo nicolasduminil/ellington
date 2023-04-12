@@ -1,0 +1,12 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: Duke SAM Template
+Resources:
+  DukeECR:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: "duke-ecr"
+Outputs:
+  RepositoryUri:
+    Value: !GetAtt DukeECR.RepositoryUri
+

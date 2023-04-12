@@ -3,15 +3,20 @@
             xsi:schemaLocation="http://jboss.org/schema/arquillian
     http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
   <defaultProtocol type="Servlet 5.0"/>
-  <engine>
-      <property name="deploymentExportPath">target/</property>
-  </engine>
   <container qualifier="managed">
     <configuration>
         <property name="jbossHome">/home/nicolas/wildfly-27.0.1.Final/</property>
     </configuration>
   </container>
   <container qualifier="remote">
+    <configuration>
+      <property name="managementAddress">127.0.0.1</property>
+      <property name="managementPort">9990</property>
+      <property name="username">nicolas</property>
+      <property name="password">password123</property>
+    </configuration>
+  </container>
+  <container qualifier="aws">
     <configuration>
       <property name="managementAddress">127.0.0.1</property>
       <property name="managementPort">9990</property>
