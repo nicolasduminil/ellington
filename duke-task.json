@@ -1,9 +1,8 @@
 {
-  "family": "wildfly",
-  "networkMode": "awsvpc",
+  "family": "duke",
   "containerDefinitions": [
     {
-      "name": "wildfly-duke",
+      "name": "wildfly",
       "image": "495913029085.dkr.ecr.eu-west-3.amazonaws.com/duke-ecr",
       "portMappings": [
         {
@@ -17,12 +16,22 @@
           "protocol": "tcp"
         }
       ],
-      "essential": true
+      "essential": true,
+      "healthCheck": {
+        "retries": 3,
+        "command": [
+          "CMD-SHELL",
+          "curl -f http://localhost:8080/ || exit 1"
+        ],
+        "timeout": 5,
+        "interval": 30
+      }
     }
   ],
   "requiresCompatibilities": [
     "FARGATE"
   ],
   "cpu": "256",
-  "memory": "512"
+  "memory": "512",
+  "networkMode": "awsvpc"
 }

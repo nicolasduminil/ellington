@@ -1,12 +1,166 @@
-AWSTemplateFormatVersion: '2010-09-09'
-Transform: 'AWS::Serverless-2016-10-31'
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: "AWS::Serverless-2016-10-31"
 Description: Duke SAM Template
+Parameters:
+  EcrUri:
+    Type: String
+    Description: The name of the ECR containing the Docker image
 Resources:
-  DukeECR:
-    Type: AWS::ECR::Repository
+  #DukeECR:
+    #Type: AWS::ECR::Repository
+    #Properties:
+      #RepositoryName: "duke-ecr"
+  EcsCluster:
+    Type: "AWS::ECS::Cluster"
     Properties:
-      RepositoryName: "duke-ecr"
-Outputs:
-  RepositoryUri:
-    Value: !GetAtt DukeECR.RepositoryUri
+      ClusterName: "duke-cluster"
+  EcsTaskRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "ecs-tasks.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+      Policies:
+        - PolicyName: "duke-task-policy"
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: "Allow"
+                Action:
+                  - "ecr:*"
+                Resource: "*"
+              - Effect: "Allow"
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource: "arn:aws:logs:*:*:*"
+              - Effect: "Allow"
+                Action:
+                  - "lambda:InvokeFunction"
+                  - "lambda:GetFunction"
+                Resource: "*"
+              - Effect: "Allow"
+                Action:
+                  - "ec2:CreateNetworkInterface"
+                  - "ec2:DescribeNetworkInterfaces"
+                  - "ec2:DeleteNetworkInterface"
+                Resource: "*"
+  EcsTaskDefinition:
+    Type: "AWS::ECS::TaskDefinition"
+    Properties:
+      Family: "duke"
+      Memory: 512
+      Cpu: 256
+      ContainerDefinitions:
+        - Name: "wildfly"
+          Image: !Join [ "", [ !Ref "EcrUri", "" ] ]
+          PortMappings:
+            - ContainerPort: 8080
+            #- HostPort: 8080
+          Essential: true
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Join [ "", [ "/ecs/", !Ref AWS::StackName ] ]
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: ecs
+              awslogs-create-group: true
+      TaskRoleArn: !GetAtt EcsTaskRole.Arn
+      ExecutionRoleArn: !GetAtt TestExecutionRole.Arn
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+  EcsService:
+    Type: "AWS::ECS::Service"
+    Properties:
+      ServiceName: "duke-service"
+      Cluster: !Ref EcsCluster
+      DesiredCount: 1
+      TaskDefinition: !Ref EcsTaskDefinition
+      LaunchType: "FARGATE"
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          SecurityGroups:
+            - !Ref DukeClusterSG
+          Subnets:
+            - !Ref DukeClusterSubnet
+  TestExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: TestExecutionRole
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - "sts:AssumeRole"
+            Principal:
+              Service:
+                - "ecs-tasks.amazonaws.com"
+      Policies:
+        - PolicyName: EcsTaskExecutionPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "ec2:*"
+                  - "ecs:*"
+                  - "logs:*"
+                  - "ecr:*"
+                Resource: "*"
+  DukeVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+  DukeClusterSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref DukeVPC
+      CidrBlock: 10.0.0.0/24
+      MapPublicIpOnLaunch: true
+  DukeClusterSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for my ECS task
+      VpcId: !Ref DukeVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+  RouteTable:
+    Type: "AWS::EC2::RouteTable"
+    Properties:
+      VpcId: !Ref DukeVPC
+  InternetGateway:
+    Type: "AWS::EC2::InternetGateway"
+  VPCGatewayAttachment:
+    Type: "AWS::EC2::VPCGatewayAttachment"
+    Properties:
+      VpcId: !Ref DukeVPC
+      InternetGatewayId: !Ref InternetGateway
+  InternetRoute:
+    Type: "AWS::EC2::Route"
+    Properties:
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !Ref InternetGateway
+      RouteTableId: !Ref RouteTable
+  SubnetARouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      RouteTableId: !Ref RouteTable
+      SubnetId: !Ref DukeClusterSubnet
+
 
