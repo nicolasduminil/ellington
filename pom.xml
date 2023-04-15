@@ -315,5 +315,37 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>docker</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>io.fabric8</groupId>
+            <artifactId>docker-maven-plugin</artifactId>
+            <version>0.42.1</version>
+            <configuration>
+              <images>
+                <img>
+                  <name>wildfly-duke</name>
+                  <build>
+                    <dockerFile>${project.basedir}/Dockerfile-with-WAR</dockerFile>
+                  </build>
+                  <run>
+                    <ports>
+                      <port>8080:8080</port>
+                      <port>9990:9990</port>
+                    </ports>
+                    <wait>
+                      <log>WFLYSRV0051: Admin console listening</log>
+                      <time>60000</time>
+                    </wait>
+                  </run>
+                </img>
+              </images>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
 </project>

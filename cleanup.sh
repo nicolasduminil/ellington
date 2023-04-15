@@ -1,3 +1,4 @@
+aws ecs update-service --service duke-service --desired-count 0 --cluster duke-cluster
 aws ecs delete-service --cluster duke-cluster --service duke-service
 aws ecs delete-cluster --cluster duke-cluster
 REPOSITORY_NAME=duke-ecr

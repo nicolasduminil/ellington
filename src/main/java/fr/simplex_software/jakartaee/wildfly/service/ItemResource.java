@@ -11,7 +11,7 @@ import java.util.*;
 @Path("items")
 public class ItemResource
 {
-  private static final String RESPONSE_OK="<p>Property has been added ! </p> <p><a href=\"http://localhost:8080/duke\">Back</a></p>";
+  private static final String RESPONSE_OK="<p>Property has been added ! </p> <p><a href=\"/duke\">Back</a></p>";
   @Inject
   private ItemFacade itemFacade;
 

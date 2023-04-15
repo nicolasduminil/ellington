@@ -12,7 +12,7 @@
   </head>
   <body>
     <h1>Insert an Item:</h1>
-    <form name="form1" action="api/kv" method="POST">
+    <form name="form1" action="api/items" method="POST">
       Key
       <input type="text" name="key">
       Value &nbsp;
@@ -28,13 +28,13 @@
         </th>
       </tr>
       <c:forEach var="item" items="${itemFacade.itemList}" varStatus="status">
-        <c:set var="url" value="api/kv/xml/${status.index}"/>
+        <c:set var="url" value="api/items/${status.index}"/>
         <tr>
           <td><a href="${url}">${item.key}</a></td>
         </tr>
       </c:forEach>
     </table>
     <br/>
-    <a href="api/kv/list">Get Full List</a>
+    <a href="api/items/list">Get Full List</a>
   </body>
 </html>
