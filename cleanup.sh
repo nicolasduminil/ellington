@@ -1,3 +1,4 @@
+aws ecs delete-service --cluster duke-cluster --service duke-service
 aws ecs delete-cluster --cluster duke-cluster
 REPOSITORY_NAME=duke-ecr
 aws ecr batch-delete-image --repository-name $REPOSITORY_NAME --image-ids imageTag=latest
