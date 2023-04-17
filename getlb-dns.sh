@@ -1,0 +1,1 @@
+aws elbv2 describe-load-balancers --query 'LoadBalancers[0].[DNSName]' --output text
