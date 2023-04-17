@@ -4,26 +4,44 @@ import fr.simplex_software.jakartaee.wildfly.domain.*;
 import jakarta.ws.rs.client.*;
 import jakarta.ws.rs.core.*;
 import org.apache.http.*;
+import org.jboss.arquillian.container.test.api.*;
+import org.jboss.arquillian.junit5.*;
+import org.jboss.arquillian.test.api.*;
+import org.jboss.shrinkwrap.api.*;
+import org.jboss.shrinkwrap.api.importer.*;
+import org.jboss.shrinkwrap.api.spec.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.*;
 
+import java.io.*;
 import java.net.*;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.*;
 
+@ExtendWith(ArquillianExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ItemIT
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class ItemArqIT
 {
-  private static final String lbUrl = "http://duke-Publi-1G2Y0M1JQK8E5-859083319.eu-west-3.elb.amazonaws.com/duke";
+  @ArquillianResource
   private URL url;
   private Client client;
   private WebTarget webTarget;
 
+  @Deployment(testable = false)
+  public static Archive<?> getEarArchive()
+  {
+    WebArchive war = ShrinkWrap.create(ZipImporter.class, "duke.war")
+      .importFrom(new File("./target/duke.war")).as(WebArchive.class);
+    war.addPackage("fr.simplex_software.jakartaee.wildfly.test");
+    return war;
+  }
+
   @BeforeEach
-  public void beforeEach() throws MalformedURLException
+  public void beforeEach()
   {
     client = ClientBuilder.newClient();
-    url = new URL(lbUrl);
     webTarget = client.target(url.toString()).path("/api/items");
   }
 

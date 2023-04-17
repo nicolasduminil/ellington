@@ -157,6 +157,9 @@
             <configuration>
               <systemPropertyVariables>
                 <arquillian.launch>managed</arquillian.launch>
+                <excludes>
+                  <exclude>**/ItemIT.java</exclude>
+                </excludes>
               </systemPropertyVariables>
             </configuration>
           </plugin>
@@ -181,6 +184,9 @@
               <systemPropertyVariables>
                 <arquillian.launch>remote</arquillian.launch>
               </systemPropertyVariables>
+              <excludes>
+                <exclude>**/ItemIT.java</exclude>
+              </excludes>
             </configuration>
           </plugin>
         </plugins>
@@ -204,6 +210,9 @@
               <systemPropertyVariables>
                 <arquillian.launch>remote</arquillian.launch>
               </systemPropertyVariables>
+              <excludes>
+                <exclude>**/ItemIT.java</exclude>
+              </excludes>
             </configuration>
           </plugin>
           <plugin>
@@ -259,57 +268,9 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-failsafe-plugin</artifactId>
             <configuration>
-              <systemPropertyVariables>
-                <arquillian.launch>aws</arquillian.launch>
-              </systemPropertyVariables>
-            </configuration>
-          </plugin>
-          <plugin>
-            <groupId>io.fabric8</groupId>
-            <artifactId>docker-maven-plugin</artifactId>
-            <dependencies>
-              <dependency>
-                <groupId>com.amazonaws</groupId>
-                <artifactId>aws-java-sdk-core</artifactId>
-                <version>1.12.445</version>
-              </dependency>
-            </dependencies>
-            <version>0.42.1</version>
-            <executions>
-              <execution>
-                <id>build</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>build</goal>
-                  <goal>tag</goal>
-                </goals>
-              </execution>
-              <execution>
-                <id>deploy</id>
-                <phase>pre-integration-test</phase>
-                <goals>
-                  <goal>push</goal>
-                </goals>
-              </execution>
-              <execution>
-                <id>undeploy</id>
-                <phase>post-integration-test</phase>
-                <goals>
-                  <goal>remove</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <pushRegistry>${ECR_URI}</pushRegistry>
-              <tagName>latest</tagName>
-              <images>
-                <img>
-                  <name>${ECR_URI}</name>
-                  <build>
-                    <dockerFile>${project.basedir}/Dockerfile-with-WAR</dockerFile>
-                  </build>
-                </img>
-              </images>
+              <includes>
+                <include>**/ItemIT.java</include>
+              </includes>
             </configuration>
           </plugin>
         </plugins>
