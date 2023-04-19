@@ -2,8 +2,10 @@ package fr.simplex_software.jakartaee.wildfly.domain;
 
 import jakarta.xml.bind.annotation.*;
 
+import java.io.*;
+
 @XmlRootElement
-public class Item
+public class Item implements Serializable
 {
   private String key;
   private String value;

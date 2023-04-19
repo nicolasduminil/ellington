@@ -16,7 +16,7 @@ public class ItemManager
   private ItemFacade itemFacade;
   @Produces
   @Named
-  private Item item;
+  private Item item = new Item();
 
   @Produces
   @Named

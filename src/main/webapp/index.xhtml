@@ -1,28 +1,28 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:mc="http://xmlns.jcp.org/jsf/composite/mycomponents">
+<html
+  xmlns:ui="jakarta.faces.facelets"
+  xmlns:f="jakarta.faces.core"
+  xmlns:h="jakarta.faces.html"
+  xmlns:mc="jakarta.faces.composite/mycomponents">
   <body>
     <ui:composition template="/templates/template.xhtml">
       <ui:define name="content">
-        <mc:item key = "#{item.key}" value =" #{item.value}" actionListener="#{itemsManager.save()}"/>
-          <h:form id="items">
-            <h:dataTable value="#{itemList}" var="item" styleClass="table" headerClass="table-header" rowClasses="table-odd-row,table-even-row">
-              <h:column>
-                <f:facet name="header">Key</f:facet>
-                <h:outputText value="#{item.key}"/>
-              </h:column>
-              <h:column>
-                <f:facet name="header">Value</f:facet>
-                <h:outputText value="#{item.value}"/>
-              </h:column>
-              <h:column>
-                <f:facet name="header">Delete</f:facet>
-                <h:commandButton actionListener="#{itemsManager.delete(item)}" styleClass="buttons" value="Delete"/>
-              </h:column>
-            </h:dataTable>
+        <mc:item key = "#{item.key}" value ="#{item.value}" actionListener="#{itemManager.save()}"/>
+        <h:form id="items">
+          <h:dataTable value="#{itemManager.itemList}" var="it" styleClass="table" headerClass="table-header" rowClasses="table-odd-row,table-even-row">
+            <h:column>
+              <f:facet name="header">Key</f:facet>
+              <h:outputText value="#{it.key}"/>
+            </h:column>
+            <h:column>
+              <f:facet name="header">Value</f:facet>
+              <h:outputText value="#{it.value}"/>
+            </h:column>
+            <h:column>
+              <f:facet name="header">Delete</f:facet>
+              <h:commandButton actionListener="#{itemManager.delete(it)}" styleClass="buttons" value="Delete"/>
+            </h:column>
+          </h:dataTable>
         </h:form>
       </ui:define>
     </ui:composition>
