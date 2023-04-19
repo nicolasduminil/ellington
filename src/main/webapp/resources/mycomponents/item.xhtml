@@ -6,14 +6,11 @@
   </cc:interface>
   <cc:implementation>
     <h:form id="form">
-      <h2>Items Management</h2>
       <h:panelGrid columns="2">
-        <h:outputText value="Key:"/>
+        <h:outputText value="Key:" for="inputTextKey"/>
         <h:inputText value="#{cc.attrs.key}" id="inputTextKey"/>
-        <h:message for="inputTextKey" errorStyle="color: red" infoStyle="color: green"/>
-        <h:outputText value="Value:"/>
+        <h:outputText value="Value:" for="inputTextValue"/>
         <h:inputText value="#{cc.attrs.value}" id="inputTextValue"/>
-        <h:message for="inputTextValue" errorStyle="color: red" infoStyle="color: green"/>
       </h:panelGrid>
       <h:commandButton id="saveButton" value="Save"/>
       <h:messages errorStyle="color: red" infoStyle="color: green" globalOnly="true" />
